@@ -1,0 +1,33 @@
+
+# Credenciais e configuracoes locais
+.env
+.env.*
+!.env.example
+config.local.php
+
+# Dependencias e caches
+node_modules/
+vendor/
+.cache/
+*.log
+
+# Backups e bases de dados locais
+*.sql
+*.sql.gz
+*.bak
+*.dump
+database/
+backups/
+
+# Ficheiros temporarios
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Documentos e uploads de utilizadores
+public/uploads/
+app/uploads/
+app/models/public/uploads/
+app/public/uploads/
+app/models/public/uploads/comprovativos/
+app/public/uploads/comprovativos/

@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Factura | ERP Plus</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 24px;
+            background: #eef1f5;
+            color: #222;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 12px;
+        }
+
+        .barra-acoes {
+            max-width: 210mm;
+            margin: 0 auto 16px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        .btn {
+            border: 0;
+            border-radius: 4px;
+            padding: 10px 16px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn-imprimir {
+            background: #1769aa;
+            color: white;
+        }
+
+        .btn-voltar {
+            background: #e0e5eb;
+            color: #263746;
+        }
+
+        .mensagem {
+            max-width: 210mm;
+            margin: 0 auto 12px;
+            padding: 12px;
+            border-radius: 4px;
+            background: #fff3cd;
+            color: #664d03;
+        }
+
+        .factura {
+            width: 210mm;
+            min-height: 297mm;
+            margin: 0 auto;
+            padding: 14mm;
+            background: #fff;
+            box-shadow: 0 2px 14px rgba(0, 0, 0, .12);
+        }
+
+        .cabecalho {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 18px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #17324d;
+        }
+
+        .empresa {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            min-width: 0;
+        }
+
+        .logo {
+            width: 78px;
+            max-height: 78px;
+            object-fit: contain;
+        }
+
+        .nome-empresa {
+            margin: 0 0 5px;
+            color: #17324d;
+            font-size: 20px;
+            overflow-wrap: anywhere;
+        }
+
+        .texto-secundario {
+            color: #596775;
+            line-height: 1.55;
+        }
+
+        .titulo-documento {
+            min-width: 160px;
+            text-align: right;
+        }
+
+        .titulo-documento h2 {
+            margin: 0 0 7px;
+            color: #17324d;
+            font-size: 25px;
+            letter-spacing: 1px;
+        }
+
+        .numero-documento {
+            font-size: 13px;
+            font-weight: bold;
+            overflow-wrap: anywhere;
+        }
+
+        .etiqueta {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 5px 9px;
+            border-radius: 3px;
+            background: #fff0d4;
+            color: #825300;
+            font-weight: bold;
+        }
+
+        .linha-informacoes {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin: 20px 0;
+        }
+
+        .bloco {
+            padding: 12px;
+            border: 1px solid #dce3e9;
+            border-radius: 4px;
+            min-width: 0;
+        }
+
+        .bloco h3 {
+            margin: 0 0 8px;
+            color: #17324d;
+            font-size: 11px;
+            letter-spacing: .5px;
+        }
+
+        .nome-cliente {
+            margin-bottom: 5px;
+            font-size: 15px;
+            font-weight: bold;
+            overflow-wrap: anywhere;
+        }
+
+        .tabela-itens {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .tabela-itens th {
+            background: #17324d;
+            color: white;
+            padding: 10px 8px;
+            text-align: left;
+            font-size: 10px;
+        }
+
+        .tabela-itens td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #e1e6eb;
+            vertical-align: top;
+        }
+
+        .tabela-itens tbody tr {
+            break-inside: avoid;
+        }
+
+        .direita {
+            text-align: right !important;
+            white-space: nowrap;
+        }
+
+        .centro {
+            text-align: center !important;
+        }
+
+        .resumo {
+            width: 280px;
+            max-width: 100%;
+            margin: 20px 0 0 auto;
+        }
+
+        .resumo-linha {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 7px 0;
+        }
+
+        .resumo-linha.total {
+            margin-top: 5px;
+            padding: 12px 0;
+            border-top: 2px solid #17324d;
+            color: #17324d;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .resumo-linha.saldo {
+            margin-top: 8px;
+            padding: 12px;
+            background: #fff3e0;
+            color: #754800;
+            font-weight: bold;
+        }
+
+        .observacoes {
+            margin-top: 24px;
+            padding: 12px;
+            border: 1px solid #dce3e9;
+            min-height: 48px;
+            overflow-wrap: anywhere;
+        }
+
+        .rodape {
+            margin-top: 38px;
+            padding-top: 12px;
+            border-top: 1px solid #dce3e9;
+            text-align: center;
+            color: #596775;
+            line-height: 1.6;
+        }
+
+        .assinaturas {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 45px;
+            margin-top: 55px;
+        }
+
+        .assinatura {
+            padding-top: 8px;
+            border-top: 1px solid #777;
+            text-align: center;
+            color: #596775;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+
+        @page {
+            size: A4 portrait;
+            margin: 0;
+        }
+
+        @media print {
+
+            html,
+            body {
+                width: 210mm;
+                min-height: 297mm;
+                margin: 0;
+                padding: 0;
+                background: #fff;
+            }
+
+            .barra-acoes,
+            .mensagem {
+                display: none !important;
+            }
+
+            .factura {
+                width: 210mm;
+                min-height: 297mm;
+                margin: 0;
+                padding: 12mm 14mm;
+                box-shadow: none;
+            }
+
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+        }
+
+        @media screen and (max-width: 800px) {
+            body {
+                padding: 8px;
+            }
+
+            .factura {
+                width: 100%;
+                min-height: auto;
+                padding: 18px;
+            }
+
+            .cabecalho {
+                flex-direction: column;
+            }
+
+            .titulo-documento {
+                text-align: left;
+            }
+
+            .linha-informacoes {
+                grid-template-columns: 1fr;
+            }
+
+            .tabela-itens {
+                font-size: 10px;
+            }
+
+            .tabela-itens th,
+            .tabela-itens td {
+                padding: 6px 4px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="barra-acoes">
+        <button class="btn btn-voltar" type="button" onclick="history.back()">
+            Voltar
+        </button>
+
+        <button class="btn btn-imprimir" id="btnImprimir" type="button" disabled>
+            Imprimir factura
+        </button>
+    </div>
+
+    <div id="mensagem" class="mensagem">
+        A carregar os dados da factura...
+    </div>
+
+    <main id="factura" class="factura" hidden>
+        <header class="cabecalho">
+            <div class="empresa">
+                <img id="empresaLogo" class="logo" alt="Logótipo da empresa" hidden>
+
+                <div>
+                    <h1 id="empresaNome" class="nome-empresa"></h1>
+                    <div id="empresaSlogan" class="texto-secundario"></div>
+                    <div id="empresaEndereco" class="texto-secundario"></div>
+                    <div id="empresaContacto" class="texto-secundario"></div>
+                    <div id="empresaEmail" class="texto-secundario"></div>
+                    <div id="empresaNuit" class="texto-secundario"></div>
+                </div>
+            </div>
+
+            <div class="titulo-documento">
+                <h2>FACTURA</h2>
+                <div id="numeroFactura" class="numero-documento"></div>
+                <div id="estadoPagamento" class="etiqueta">A prazo</div>
+            </div>
+        </header>
+
+        <section class="linha-informacoes">
+            <div class="bloco">
+                <h3>FACTURADO A</h3>
+                <div id="clienteNome" class="nome-cliente"></div>
+                <div id="clienteDetalhes" class="texto-secundario"></div>
+            </div>
+
+            <div class="bloco">
+                <h3>INFORMAÇÕES DO DOCUMENTO</h3>
+                <div><strong>Data de emissão:</strong>
+                    <span id="dataEmissao"></span>
+                </div>
+                <div><strong>Data de vencimento:</strong>
+                    <span id="dataVencimento"></span>
+                </div>
+                <div><strong>Condição:</strong>
+                    <span id="condicaoPagamento"></span>
+                </div>
+                <div><strong>Filial:</strong>
+                    <span id="filialNome"></span>
+                </div>
+            </div>
+        </section>
+
+        <table class="tabela-itens">
+            <thead>
+                <tr>
+                    <th style="width: 5%">N.º</th>
+                    <th>DESCRIÇÃO</th>
+                    <th class="centro" style="width: 12%">QTD.</th>
+                    <th class="direita" style="width: 19%">PREÇO UNIT.</th>
+                    <th class="direita" style="width: 20%">SUBTOTAL</th>
+                </tr>
+            </thead>
+            <tbody id="itensFactura"></tbody>
+        </table>
+
+        <section class="resumo">
+            <div class="resumo-linha">
+                <span>Subtotal</span>
+                <strong id="subtotal"></strong>
+            </div>
+            <div class="resumo-linha">
+                <span>Desconto</span>
+                <strong id="desconto"></strong>
+            </div>
+            <div class="resumo-linha">
+                <span id="textoImposto">IVA</span>
+                <strong id="imposto"></strong>
+            </div>
+            <div class="resumo-linha total">
+                <span>TOTAL</span>
+                <span id="total"></span>
+            </div>
+            <div class="resumo-linha">
+                <span>Valor recebido</span>
+                <strong id="valorRecebido"></strong>
+            </div>
+            <div class="resumo-linha saldo">
+                <span>Saldo por pagar</span>
+                <span id="saldo"></span>
+            </div>
+        </section>
+
+        <section class="observacoes">
+            <strong>Observações:</strong>
+            <div id="observacoes"></div>
+        </section>
+
+        <section class="assinaturas">
+            <div class="assinatura">Assinatura do emitente</div>
+            <div class="assinatura">Assinatura do cliente</div>
+        </section>
+
+        <footer class="rodape">
+            <div id="rodapeEmpresa"></div>
+            <div>Documento emitido pelo ERP Plus.</div>
+        </footer>
+    </main>
+
+    <script src="/erpplus/app/js/documento_factura.js"></script>
+</body>
+
+</html>
